@@ -3,11 +3,10 @@
         <div class="door-frame" :class=" { selected: selected && !open }">
             <Gift v-if="open && hasGift"/>
         </div>
-        <div class="door" :class="{ open }"
-            @click="selected = !selected">
-            <div class="number" :class=" { selected }">{{ number }}</div>
-            <div class="knob" :class=" { selected }"
-                @click.stop="open = true"></div>
+        
+        <div class="door" :class="{ open }" @click="selected = !selected">
+            <div class="number" :class="{ selected }">{{ number }}</div>
+            <div class="knob" :class="{ selected }" @click.stop="open = true"/>
         </div>
     </div>
 </template>
@@ -79,6 +78,7 @@ export default {
     background-color: brown;
     align-self: flex-start;
     margin-top: 60px;
+    cursor: pointer;
 }
 
 .door-frame.selected {
