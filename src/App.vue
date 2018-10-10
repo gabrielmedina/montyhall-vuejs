@@ -1,23 +1,35 @@
 <template>
     <div id="app">
         <h1>Problema de Monty Hall</h1>
-        <div class="form">
-            <div v-if="!started">
-                <label for="portsAmount">Quantas portas? </label>
-                <input type="text" id="portsAmount" size="3"
+        <div v-if="!started" class="form">
+            <div>
+                <label for="portsAmount">Quantas portas?</label>
+                <input
+                    type="number"
+                    id="portsAmount"
+                    min="1"
                     v-model.number="portsAmount">
             </div>
-            <div v-if="!started">
-                <label for="selectedPort">Qual a porta premiada? </label>
-                <input type="text" id="selectedPort" size="3"
+            <div>
+                <label for="selectedPort">Qual a porta premiada?</label>
+                <input
+                    type="number"
+                    id="selectedPort"
+                    min="1"
+                    :max="portsAmount"
                     v-model.number="selectedPort">
             </div>
-            <button v-if="!started" @click="started = true">Iniciar</button>
-            <button v-if="started" @click="started = false">Reiniciar</button>
+
+            <button class="btn" @click="started = true">Iniciar</button>
         </div>
-        <div class="doors" v-if="started">
-            <div v-for="i in portsAmount" :key="i">
+
+        <div v-else class="result">
+            <button class="btn" @click="started = false">Reiniciar</button>
+
+            <div class="doors">
+              <div v-for="i in portsAmount" :key="i">
                 <Door :hasGift="i === selectedPort" :number="i" />
+              </div>
             </div>
         </div>
     </div>
@@ -32,13 +44,17 @@ export default {
         return {
             started: false,
             portsAmount: 3,
-            selectedPort: null
+            selectedPort: 1
         }
     }
 }
 </script>
 
 <style>
+:root {
+    --border-radius: 8px;
+}
+
 * {
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
@@ -49,36 +65,103 @@ body {
     background: linear-gradient(to right, rgb(21, 153, 87), rgb(21, 87, 153));
 }
 
-#app{
+#app {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 1rem;
 }
 
 #app h1 {
-    border: 1px solid #000;
+    border: 1px solid #0004;
     background-color: #0004;
-    padding: 20px;
-    margin-bottom: 60px;
+    border-radius: var(--border-radius);
+    font-size: 1.2em;
+    line-height: 1;
+    margin: 30px 0 60px;
+    padding: 20px 30px;
+    text-align: center;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    align-items: stretch;
     margin-bottom: 40px;
+    text-align: center;
 }
 
-.form, .form input, .form button {
+.form div {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.form label {
+    display: block;
     margin-bottom: 10px;
-    font-size: 2rem;
+}
+
+.form input {
+    box-sizing: border-box;
+    background: #fff2;
+    border-radius: var(--border-radius);
+    border: solid 2px #0004;
+    color: #fff;
+    display: block;
+    font-size: 1.2em;
+    padding: 10px 35px;
+    text-align: center;
+    width: 100%;
+}
+
+.form input:focus {
+    outline: none;
+    border-color: #0007;
+}
+
+.form input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.btn {
+    cursor: pointer;
+    color: #fff;
+    font-size: 1em;
+    text-transform: uppercase;
+    padding: 15px 35px;
+    background: #0004;
+    border: 0;
+    border-radius: var(--border-radius);
+    transition: .3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    background: #0006;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
 }
 
 .doors {
+    margin-top: 40px;
     align-self: stretch;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
+}
+
+@media screen and (min-width: 768px) {
+    #app {
+        font-size: 1.5rem;
+    }
 }
 </style>
